@@ -1,0 +1,38 @@
+import Image from '@/components/Image';
+
+# Image 组件
+
+## 示例
+
+<Image src='/images/art.jpg'></Image>
+
+## 用法
+
+```js copy
+import Image from '@/components/Image';
+
+<Image src='/images/art.jpg'></Image>;
+<Image src='https://cdn.jsdelivr.net/gh/SimpleLifecst/simple@main//181224-161372954458d6.jpg'></Image>;
+```
+
+## API
+
+`Image`组件需要一下属性
+
+### `width`(可选)
+
+控制图片宽度，默认占满容器
+
+- Type: 'number'
+
+### `height`(可选)
+
+默认是图片的高度
+
+- Type: 'number'
+
+### `src`(必选)
+
+图片的地址，可使用`public`下的静态文件，请用`/`开始您的路径，否则会导致线上路径出错
+
+如果你需要使用远程地址如`http://xxx`, 可直接使用完整地址

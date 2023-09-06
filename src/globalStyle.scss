@@ -1,0 +1,127 @@
+.light {
+  .border {
+    border: 1px solid #e5e7eb;
+  }
+  .custom-table tr {
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .start-page-container header {
+    background-image: -webkit-linear-gradient(left, #000, #868686);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+.dark {
+  .border {
+    border: 1px solid #282828;
+  }
+  .custom-table tr {
+    border-bottom: 1px solid #282828;
+  }
+  .start-page-container header {
+    background-image: -webkit-linear-gradient(left, #fff, #4d4c4c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+// 其他
+.empty-result {
+  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90px;
+  color: #a4aab5;
+}
+
+// Table组件
+.custom-table {
+  margin: 15px 0;
+  border-collapse: collapse;
+  width: 100%;
+
+  td,
+  th {
+    text-align: left;
+    padding: 8px;
+  }
+
+  th:first-child,
+  td:first-child {
+    padding-left: 0;
+  }
+
+  tbody td {
+    text-align: left;
+    font-size: 14px;
+    min-width: 150px;
+  }
+
+  tbody td:first-child {
+    color: #9159f0;
+  }
+
+  tbody td:nth-child(2) {
+    color: #64748b;
+  }
+}
+
+.sl-footer {
+  span:first-child {
+    font-size: 18px;
+    font-style: italic;
+  }
+
+  span:last-child {
+    font-size: 12px;
+    font-style: italic;
+  }
+}
+
+.start-page-container {
+  padding: 20px;
+
+  .title {
+    max-width: 950px;
+
+    header {
+      font-size: 80px;
+    }
+  }
+
+  .small_title {
+    font-size: 25px;
+    margin: 25px 0;
+  }
+
+  .btn {
+    width: 180px;
+    height: 60px;
+    background-color: #077bff;
+    margin: 20px 0;
+    border-radius: 50px;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: #fff;
+
+    span {
+      padding-left: 5px;
+      width: 30px;
+      transition: padding-left 0.3s linear;
+    }
+  }
+
+  .btn:hover {
+    box-shadow: 1px 1px 22px 5px rgba(0, 0, 255, 0.2);
+
+    span {
+      padding-left: 10px;
+      transition: all 0.3s linear;
+    }
+  }
+}

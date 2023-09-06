@@ -1,0 +1,859 @@
+import Table from '@/components/Table';
+import Image from '@/components/Image';
+import {Callout} from 'nextra/components';
+import {Tab, Tabs} from 'nextra/components';
+
+# 主题配置
+
+该主题使用`theme.config.jsx`文件配置。它应该导出一个包含您的配置的对象，例如：
+
+```js copy filename="theme.config.jsx"
+export default {
+  project: {
+    link: 'https://github.com/SimpleLifecst/nextra-template',
+  },
+  logo: <strong>SimpleLife</strong>,
+};
+```
+
+下面列出了每个选项的详细信息。
+
+## 全局配置
+
+### 文档存储库(github/gitee 仓库)
+
+设置文档仓库 URL。它用于生成`问题？给我反馈`链接和`在 GitHub 上编辑此页面`链接。
+
+<Table
+  list={[{option: 'docsRepositoryBase', type: 'string', desc: '存储库地址'}]}
+></Table>
+
+#### 指定路径
+
+如果您的文档为子文件夹或存储库的不同分支中，您可以简单地将`docsRepositoryBase`设置为文档页面/文件夹的根路径。例如：
+
+```js copy
+export default {
+  docsRepositoryBase:
+    'https://github.com/SimpleLifecst/nextra-template/tree/main/',
+};
+```
+
+当点击如下链接，会在自动拼接上正确的路径
+
+<Image src='/images/toc_link.png'></Image>
+
+### 搜索引擎优化
+
+您可以通过 useNextSeoProps 选项配置 SEO 相关设置。useNextSeoProps 函数返回将传递给 Next SEO 组件的道具。
+
+它也是一个钩子，因此您可以在里面使用像`useRouter`这样的 API 来有条件地返回值。
+
+<Table
+  list={[
+    {
+      option: 'useNextSeoProps',
+      type: '() => NextSeoProps',
+      desc: '返回Next SEO选项的React钩子函数。',
+    },
+  ]}
+></Table>
+
+例如，我们可以让所有的页面显示相同后缀的标题
+
+<Image src='/images/title.png'></Image>
+
+```js copy
+export default {
+  useNextSeoProps() {
+    return {
+      titleTemplate: '%s – SimpleLife',
+    };
+  },
+};
+```
+
+这个`%s`是一个占位符，它会替换我们页面的标题
+
+您也可以有条件地返回它，以避免在主页上添加后缀：
+
+```js copy
+export default {
+  useNextSeoProps() {
+    const {asPath} = useRouter();
+    if (asPath !== '/') {
+      return {
+        titleTemplate: '%s – SimpleLife',
+      };
+    }
+  },
+};
+```
+
+### Head 标签
+
+配置网站的`<head>`标签。您可以添加元标签、标题、网站图标等。
+
+<Table
+  list={[
+    {
+      option: 'head',
+      type: 'React.ReactNode | React.FC',
+      desc: '将组件内容渲染到<head>标签内。',
+    },
+  ]}
+></Table>
+
+<Callout type='warning'>
+  使用`head`属性添加网站图标不稳定，刷新页面图标就加载不出了，谨慎使用
+</Callout>
+
+#### 静态 Head 标签
+
+如果你只有静态的头部标签，很容易直接把它们放在`<head>`内。例如：
+
+```js copy
+export default {
+  head: (
+    <>
+      <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+      <meta property='og:title' content='SimpleLife' />
+      <meta property='og:description' content='This website is SimpleLife' />
+    </>
+  ),
+};
+```
+
+#### 动态 Head 标签
+
+您还可以使用函数组件作为`head`，根据当前页面的前提动态生成 `head` 标签。例如：
+
+```js copy
+import {useRouter} from 'next/router';
+import {useConfig} from 'nextra-theme-docs';
+
+export default {
+  head: () => {
+    const {asPath, defaultLocale, locale} = useRouter();
+    const {frontMatter} = useConfig();
+    const url =
+      'https://my-app.com' +
+      (defaultLocale === locale ? asPath : `/${locale}${asPath}`);
+
+    return (
+      <>
+        <meta property='og:url' content={url} />
+        <meta property='og:title' content={frontMatter.title || 'SimpleLife'} />
+        <meta
+          property='og:description'
+          content={frontMatter.description || 'This website is SimpleLife'}
+        />
+      </>
+    );
+  },
+};
+```
+
+<Callout type='info'>关于 useConfig API 部分待Nextra出更详细的文档</Callout>
+
+### 黑暗模式和主题
+
+自定义网站的主题内容。
+
+<Table
+  list={[
+    {
+      option: 'darkMode',
+      type: 'boolean',
+      desc: '显示或隐藏黑暗模式状态开关按钮。',
+    },
+    {
+      option: 'nextThemes',
+      type: 'object',
+      desc: '"next-themes"主题的配置',
+    },
+  ]}
+></Table>
+
+### 主题色
+
+您可以通过将主色调值设置为深色或浅色主题来调整网站的主题颜色。
+
+<Table
+  list={[
+    {
+      option: 'primaryHue',
+      type: 'number | { dark: number; light: number }	',
+      desc: '主题色的色调。',
+    },
+  ]}
+></Table>
+
+```js copy {2,6-9}
+export default {
+  primaryHue: 0,
+};
+
+export default {
+  primaryHue: {
+    dark: 0,
+    light: 150
+  }
+};
+```
+
+## 导航栏
+
+### 网站徽标
+
+导航栏最左侧显示的网站徽标。它可以是 React 节点或函数组件。
+
+<Table
+  list={[
+    {
+      option: 'logo',
+      type: 'React.ReactNode | React.FC',
+      desc: '网站的徽标',
+    },
+    {
+      option: 'logoLink',
+      type: 'boolean | string',
+      desc: '默认是项目首页，可以使用true/false关闭链接，也可以更改为其他跳转路径',
+    },
+  ]}
+></Table>
+
+<Image src='/images/navbar_logo.png'></Image>
+
+设计一个 Logo 组件，更有利于维护自己的 logo 哦
+
+```js copy
+export default {
+  logo: Logo,
+  logoLink: false,
+};
+```
+
+### 项目链接
+
+在导航栏上最右侧显示一个链接到您的项目主页的按钮。默认情况下，它链接到 SimpleLife 的 GitHub 存储库。
+
+<Table
+  list={[
+    {
+      option: 'project.link',
+      type: 'string',
+      desc: '项目主页的URL',
+    },
+    {
+      option: 'project.icon',
+      type: 'React.ReactNode | React.FC',
+      desc: '链接图标，默认Github图标',
+    },
+  ]}
+></Table>
+
+您可以配置`project.link`和`project. icon`来自定义项目链接，例如使其链接到您的 GitLab 存储库：
+
+<Image src='/images/project-link.webp'></Image>
+
+```js copy
+export default {
+  project: {
+    link: 'https://gitlab.com/inkscape/inkscape',
+    icon: (
+      <svg width='24' height='24' viewBox='0 0 256 256'>
+        <path
+          fill='currentColor'
+          d='m231.9 169.8l-94.8 65.6a15.7 15.7 0 0 1-18.2 0l-94.8-65.6a16.1 16.1 0 0 1-6.4-17.3L45 50a12 12 0 0 1 22.9-1.1L88.5 104h79l20.6-55.1A12 12 0 0 1 211 50l27.3 102.5a16.1 16.1 0 0 1-6.4 17.3Z'
+        ></path>
+      </svg>
+    ),
+  },
+};
+```
+
+### 聊天链接
+
+在导航栏右侧上显示一个链接到项目论坛或其他社交媒体的按钮。
+
+<Table
+  list={[
+    {
+      option: 'chat.link',
+      type: 'string',
+      desc: '聊天链接的URL',
+    },
+    {
+      option: 'chat.icon',
+      type: 'React.ReactNode | React.FC',
+      desc: '链接图标，默认图标是Discord',
+    },
+  ]}
+></Table>
+
+您可以配置`chat.link`和`chat.icon`来自定义聊天链接，例如将其链接到您的 Twitter 帐户：
+
+```js copy
+export default {
+  chat: {
+    link: 'https://twitter.com/SimpleLife',
+    icon: (
+      <svg width='24' height='24' viewBox='0 0 248 204'>
+        <path
+          fill='currentColor'
+          d='M221.95 51.29c.15 2.17.15 4.34.15 6.53 0 66.73-50.8 143.69-143.69 143.69v-.04c-27.44.04-54.31-7.82-77.41-22.64 3.99.48 8 .72 12.02.73 22.74.02 44.83-7.61 62.72-21.66-21.61-.41-40.56-14.5-47.18-35.07a50.338 50.338 0 0 0 22.8-.87C27.8 117.2 10.85 96.5 10.85 72.46v-.64a50.18 50.18 0 0 0 22.92 6.32C11.58 63.31 4.74 33.79 18.14 10.71a143.333 143.333 0 0 0 104.08 52.76 50.532 50.532 0 0 1 14.61-48.25c20.34-19.12 52.33-18.14 71.45 2.19 11.31-2.23 22.15-6.38 32.07-12.26a50.69 50.69 0 0 1-22.2 27.93c10.01-1.18 19.79-3.86 29-7.95a102.594 102.594 0 0 1-25.2 26.16z'
+        />
+      </svg>
+    ),
+  },
+};
+```
+
+### 搜索栏
+
+在导航栏右侧有一个搜索栏，默认效果是全英文，需要通过配置更改
+
+<Table
+  list={[
+    {
+      option: 'search.component',
+      type: 'React.ReactNode | React.FC<{ className?: string, directories: Item[]}>',
+      desc: '搜索栏组件，可重写搜索栏',
+    },
+    {
+      option: 'search.emptyResult',
+      type: 'React.ReactNode | React.FC',
+      desc: '搜索无内容提示信息',
+    },
+    {
+      option: 'search.loading',
+      type: 'React.ReactNode | React.FC',
+      desc: '搜索加载中提示信息',
+    },
+    {
+      option: 'search.error',
+      type: 'string | (() => string)',
+      desc: '搜索错误提示信息',
+    },
+    {
+      option: 'search.placeholder',
+      type: 'string | (() => string)',
+      desc: '搜索栏占位内容',
+    },
+  ]}
+></Table>
+
+```js copy
+export default {
+  search: {
+    emptyResult: '找不到结果',
+    loading: '加载中',
+    error: '搜索错误',
+    placeholder: '搜索',
+  },
+};
+```
+
+### 横幅
+
+在网站顶部显示横幅。它可以用来显示警告或通知。
+
+<Table
+  list={[
+    {
+      option: 'banner.dismissible',
+      type: 'boolean',
+      desc: '是否显示关闭横幅按钮',
+    },
+    {
+      option: 'banner.key',
+      type: 'string',
+      desc: '存储key以保持横幅状态（关闭或打开)',
+    },
+    {
+      option: 'banner.text',
+      type: 'React.ReactNode | React.FC',
+      desc: '横幅内容',
+    },
+  ]}
+></Table>
+
+<Image src='/images/banner.png'></Image>
+
+```js copy
+banner: {
+  dismissible: true,
+  text: (
+    <a
+      href='https://github.com/SimpleLifecst/nextra-template'
+      target='_blank'
+    >
+      🎉 查看SimpleLife GitHub仓库.
+    </a>
+  ),
+},
+```
+
+#### Banner key
+
+横幅可以被关闭。默认情况下，`banner.key`是`nextra-banner`，会存储在`localStorage`使用它来保持横幅状态（关闭或不关闭）在客户端上。
+
+可以自定义`key`值，通过改变 key 来改变横幅的状态：`1`打开、`0`关闭
+
+```js copy
+export default {
+  banner: {
+    key: 'SimpleLife',
+    text: <a>…………</a>,
+  },
+};
+```
+
+<Callout type='info'>
+  目前我没有很好的办法，来实现动态的打开和关闭，都需要刷新页面才能响应，这与黑暗主题的切换完全不一样
+</Callout>
+
+### 自定义导航栏
+
+自定义整个导航栏组件。
+
+<Table
+  list={[
+    {
+      option: 'navbar.component',
+      type: 'React.ReactNode | React.FC<NavBarProps>',
+      desc: '导航栏组件',
+    },
+    {
+      option: 'navbar.extraContent',
+      type: 'React.ReactNode | React.FC',
+      desc: '在最右侧最后一个图标后显示额外的内容。',
+    },
+  ]}
+></Table>
+
+如果你觉得当前的导航条不是很满意，完全可以自定义。使用`extraContent`可以添加一个额外的按钮，例如反馈按钮：
+
+<Image src='/images/feedback.png' />
+
+```js copy
+import Navbar from "@/components/Navbar"
+import Feedback from "@/components/Feedback"
+
+export {
+  navbar: {
+    component: Navbar,
+    extraContent: Feedback
+  }
+}
+```
+
+## 侧边栏
+
+<Table
+  list={[
+    {
+      option: 'sidebar.defaultMenuCollapseLevel',
+      type: 'number',
+      desc: '指定左侧菜单默认折叠的文件夹级别。默认为2。',
+    },
+    {
+      option: 'sidebar.autoCollapse',
+      type: 'boolean',
+      desc: '如果为true，则自动折叠defaultMenuCollapseLevel上方的非活动文件夹。',
+    },
+    {
+      option: 'sidebar.titleComponent',
+      type: 'React.ReactNode | React.FC<{type: string;title: string;route: string;}>',
+      desc: '自定义渲染侧边栏标题的组件。',
+    },
+    {
+      option: 'sidebar.toggleButton',
+      type: 'boolean',
+      desc: '隐藏/显示侧边栏状态开关按钮。默认隐藏。',
+    },
+  ]}
+></Table>
+
+### 菜单折叠级别
+
+侧边栏菜单默认在 2 级折叠，可以通过设置侧边栏进行更改，`defaultMenuCollapseLevel`不同的数字，例如设置为 1 时，每个文件夹默认折叠，设置为`Infinity`时，默认展开所有嵌套文件夹。
+
+如果`sibar.autoCollapse`设置为 true，则所有不包含活动/集中路由的文件夹将自动折叠到`sibar.defaultMenuCollapseLevel`设置的级别。例如，如果`defaultMenuCollapseLevel`为 2，则顶级文件夹不会自动折叠。
+
+### 自定义侧边栏标题
+
+与`Separators`一起，您可以使用`sibar.titleComponent`属性来自定义侧边栏内容的呈现方式：
+
+<Image src='/images/sidebar-customized.png'></Image>
+
+<Tabs items={['theme.config.jsx', 'pages/_meta.json']}>
+  <Tab>
+    ```js copy
+    export default {
+      sidebar: {
+        titleComponent({title, type}) {
+          if (type === 'separator') {
+            return (
+              <div style={{background: 'cyan', textAlign: 'center'}}>{title}</div>
+            );
+          }
+          return <>👉 {title}</>;
+        },
+      },
+    };
+    ```
+  </Tab>
+  <Tab>
+    ```json copy
+    {
+      "index": "Intro",
+      "--": {
+        "type": "separator",
+        "title": "A Separator"
+      },
+      "frameworks": "JS Frameworks & Libs",
+      "about": "About"
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## 内容
+
+### MDX 组件
+
+提供自定义 MDX 组件中的元素来渲染内容。例如，您可以使用自定义`pre`来渲染代码块。
+
+<Table
+  list={[
+    {
+      option: 'components',
+      type: 'Record<string, React.FC>',
+      desc: '自定义MDX组件',
+    },
+  ]}
+></Table>
+
+```js copy
+import Code from '@/components/Code';
+
+export default {
+  components: {
+    pre: Code,
+  },
+};
+```
+
+`components`属性是一个对象，使用键值对的形式，键必须是规定的元素，请查看[MDX components](https://mdxjs.com/table-of-components/ 'MDX components')
+
+### 书写方向
+
+网站的默认书写方向。
+
+<Table
+  list={[
+    {
+      option: 'direction',
+      type: '"ltr" | "rtl"',
+      desc: '书写方向',
+    },
+  ]}
+></Table>
+
+```js copy
+export default {
+  direction: 'rtl',
+};
+```
+
+### 主要内容
+
+渲染页面主要区域的顶部或底部内容。它可用于渲染评论部分、时事通讯表单或任何其他类型的内容。
+
+<Table
+  list={[
+    {
+      option: 'main',
+      type: 'React.FC<{ children: React.ReactNode }>',
+      desc: '主要内容组件',
+    },
+  ]}
+></Table>
+
+```js copy
+import MainComponent from '@/components/MainComponent';
+
+export default {
+  main: MainComponent,
+};
+```
+
+如果你需要在文章底部添加一个评论区，可将您的组件，放置在`children`下面
+
+```js copy filename="MainComponent"
+export default function MainComponent({children}) {
+  return (
+    <>
+      <div>{children}</div>
+      <div>评论区</div>
+    </div>
+  );
+}
+```
+
+## 目录侧边栏
+
+### 目录
+
+在页面右侧显示目录。它对于在标题之间导航很有用。
+
+<Table
+  list={[
+    {
+      option: 'toc.component',
+      type: 'React.ReactNode | React.FC<TOCProps>',
+      desc: '自定义渲染目录组件',
+    },
+    {
+      option: 'toc.extraContent',
+      type: 'React.ReactNode | React.FC',
+      desc: '在目录下面显示额外的内容',
+    },
+    {
+      option: 'toc.float',
+      type: 'boolean',
+      desc: '将目录浮动到内容旁边。',
+    },
+    {
+      option: 'toc.title',
+      type: 'React.ReactNode | React.FC',
+      desc: '目录标题，默认显示"On This Page"',
+    },
+    {
+      option: 'toc.headingComponent',
+      type: 'React.FC<{ id: string, children: string }>',
+      desc: '目录标题的自定义渲染器。',
+    },
+    {
+      option: 'toc.backToTop',
+      type: 'boolean',
+      desc: '添加`Scroll to top`滚动到顶部的链接',
+    },
+  ]}
+></Table>
+
+```js copy
+export default {
+  toc: {
+    title: '目录',
+    backToTop: true,
+    float: true,
+  },
+};
+```
+
+### 浮动目录
+
+`toc.float`默认启用，开启后，目录会显示在页面右侧，滚动时会跟随，如果禁用，目录会直接显示在页面侧边栏。
+
+### 编辑链接
+
+在指向 GitHub（或其他位置）上的文件 URL 的页面上显示`Edit this page`链接。
+
+<Table
+  list={[
+    {
+      option: 'editLink.text',
+      type: 'React.ReactNode | React.FC',
+      desc: '默认编辑链接的显示内容，如“Edit this page”',
+    },
+    {
+      option: 'editLink.component',
+      type: 'React.FC<{children: React.ReactNode;className?: string;filePath?: string;}',
+      desc: '定制的编辑链接组件。',
+    },
+  ]}
+></Table>
+
+### 反馈链接
+
+内置反馈链接为用户提供了一种提交留档反馈的方式。默认情况下，它是一个指向文档存储库问题创建表单的链接，使用当前网站标题预填充 issue 标题
+
+<Table
+  list={[
+    {
+      option: 'feedback.content',
+      type: 'React.ReactNode | React.FC',
+      desc: '反馈按钮的内容',
+    },
+    {
+      option: 'feedback.labels',
+      type: 'string',
+      desc: '可以添加到新创建的GitHub issue中的标签',
+    },
+    {
+      option: 'feedback.useLink',
+      type: '() => string',
+      desc: '默认情况下，自定义链接将在“docsRepositoryBase”中设置的存储库中打开一个问题。',
+    },
+  ]}
+></Table>
+
+要想禁用它，你可以设置`feedback.content`为`null`
+
+## 页尾
+
+### 分页导航
+
+在内容底部显示上一页和下一页链接。这对于在页面之间导航很有用。
+
+<Table
+  list={[
+    {
+      option: 'navigation',
+      type: 'boolean | object',
+      desc: '启用或禁用导航链接。',
+    },
+    {
+      option: 'navigation.prev',
+      type: 'boolean',
+      desc: '启用或禁用上一页链接。',
+    },
+    {
+      option: 'navigation.next',
+      type: 'boolean',
+      desc: '启用或禁用下一页链接。',
+    },
+  ]}
+></Table>
+
+<Image src='/images/navigation.webp'></Image>
+
+```js copy
+export default {
+  navigation: {
+    prev: true,
+    next: true,
+  },
+};
+```
+
+配置`navigation: true`效果和上面等同
+
+### 最后更新日期
+
+显示每个页面的最后更新日期。这对于显示内容的新鲜度很有用。
+
+<Table
+  list={[
+    {
+      option: 'gitTimestamp',
+      type: 'React.ReactNode | React.FC<{ timestamp: Date }>',
+      desc: '组件渲染最近更新的信息',
+    },
+  ]}
+></Table>
+
+```js copy
+export default {
+  gitTimestamp: LastUpdateDate,
+};
+```
+
+```js copy filename="LastUpdateDate"
+import dayjs from 'dayjs';
+
+function LastUpdateDate({timestamp}) {
+  return '最后更新于 ' + dayjs(timestamp).format('YYYY年M月D日');
+}
+
+export default LastUpdateDate;
+```
+
+## 尾部
+
+网站的尾部区域。您可以为默认尾部指定一些内容，也可以使用自定义组件对其进行完全自定义
+
+<Table
+  list={[
+    {
+      option: 'footer.text',
+      type: 'React.ReactNode | React.FC',
+      desc: '默认页脚组件的内容',
+    },
+    {
+      option: 'footer.component',
+      type: 'React.ReactNode | React.FC<{ menu: boolean }>',
+      desc: '自定义的页脚组件',
+    },
+  ]}
+></Table>
+
+### 版权信息
+
+```js copy
+export default {
+  footer: {
+    text: (
+      <span>
+        Copyright {new Date().getFullYear()} © <span>SimpleLife</span>.
+      </span>
+    ),
+  },
+};
+```
+
+## 主题模式切换
+
+可切换黑夜模式
+
+<Table
+  list={[
+    {
+      option: 'themeSwitch.component',
+      type: 'React.ReactNode | React.FC<{ lite?: boolean, className?: string }>	',
+      desc: '渲染主题切换功能的组件。',
+    },
+    {
+      option: 'themeSwitch.useOptions',
+      type: 'ThemeOptions | () => ThemeOptions',
+      desc: '主题切换中的选项',
+    },
+  ]}
+></Table>
+
+### 选项
+
+您可以为本地语言自定义选项名称：
+
+```js copy
+export default {
+  themeSwitch: {
+    useOptions() {
+      return {
+        light: '白天',
+        dark: '黑夜',
+        system: '系统',
+      };
+    },
+  },
+};
+```
+
+## Favicon 图标<span style={{"color": "red"}}>(实验性)</span>
+
+并非所有浏览器都支持此功能，但这是一种只需使用表情符号或字符来自定义网站图标的好方法。
+
+<Table
+  list={[
+    {
+      option: 'faviconGlyph',
+      type: 'string',
+      desc: '用作网站显示的图标。',
+    },
+  ]}
+></Table>
+
+<Callout type='warning'>该功能有些bug，并保存图标的稳定性</Callout>

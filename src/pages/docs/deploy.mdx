@@ -1,0 +1,223 @@
+import Image from '@/components/Image';
+import {Callout} from 'nextra/components';
+import {Tab, Tabs} from 'nextra/components';
+
+# 部署
+
+如果您并没有直接克隆 SimpleLife 项目，需要按照部署文档一步一步设置。其中比较基础的部署能力，如将项目上传到 Github 仓库，并不会提及。
+
+## GitHub Actions
+
+<Callout>
+  希望您的Github项目是Public，不然你将无法免费使用GitHub Actions
+</Callout>
+GitHub Actions 是一种工具，可让你在 GitHub 仓库中执行不同的自动化操作
+
+它允许你创建自定义工作流，你可以使用这些工作流来自动化开发过程，例如构建、测试和部署代码
+
+<Image src='/images/actions.png' />
+
+GitHub Actions 的配置文件叫做 workflow 文件，存放在代码仓库的`.github/workflows`目录
+
+workflow 文件采用`YAML`格式, 文件名可以任意取, 但是后缀名统一为.yml, 比如`config.yml`
+
+一个库可以有多个 workflow 文件, GitHub 只要发现`.github/workflows`目录里面有 \*.yml 文件, 就会自动运行该文件
+
+点击`set up a workflow yourself`创建 workflow
+
+<Image src='/images/workflow.png' />
+
+```yml copy filename=".github/workflows/config.yml"
+name: Actions CI - Next.js version 12 static site export, GitHub Actions Build and Deploy
+on:
+  push:
+    branches: [main]
+# 执行的一项或多项任务
+jobs:
+  build-and-deploy:
+    # 运行在虚拟机环境ubuntu-latest
+    # https://docs.github.com/zh/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idruns-on
+    runs-on: ubuntu-latest
+    steps:
+      - name: 获取源码  🛎️
+        uses: actions/checkout@v3
+      - name: Node环境版本 🗜️
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: 安装 Pnpm 🧬
+        uses: pnpm/action-setup@v2
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: true
+      - name: 安装依赖 ⚙️
+        run: pnpm install
+      - name: 打包 🏗️
+        run: |
+          npm run build
+          touch out/.nojekyll
+      - name: 部署 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: out
+          clean: true
+```
+
+点击`Commit changes`来创建改文件，然后`actions`就开始自动化运行了
+
+在配置`workflow`会出现一下问题，下面将带你一步步剖析问题和解决问题
+点击`build-and-deploy`查看错误日志
+
+<Image src='/images/build_deploy.png' />
+
+### Bug1
+
+<Tabs items={["bug图","原因","解决方案"]}>
+  <Tab>
+    <Image src='/images/yml_bug1.png' />
+  </Tab>
+  <Tab>
+    该报错表示未配置打包命令
+  </Tab>
+  <Tab>
+    ```js copy filename="package.json" {3}
+    "scripts": {
+      "dev": "next dev",
+      "build": "next build"
+    },
+    ```
+  </Tab>
+</Tabs>
+
+### Bug2
+
+<Tabs items={["bug图","原因","解决方案"]}>
+  <Tab>
+    <Image src='/images/yml_bug2.png' />
+  </Tab>
+  <Tab>
+    该报错表示找不到`out`文件夹，您需要配置打包后输出的静态文件，打包到`out`文件夹
+  </Tab>
+  <Tab>
+    ```js copy filename="next.config.js" {6-8}
+    const withNextra = require('nextra')({
+      theme: 'nextra-theme-docs',
+      themeConfig: './theme.config.jsx',
+    });
+
+    const nextConfig = {
+      output: 'export',
+    };
+
+    module.exports = withNextra(nextConfig);
+    ```
+
+  </Tab>
+</Tabs>
+
+### Bug3
+
+<Tabs items={["bug图","原因","解决方案"]}>
+  <Tab>
+    <Image src='/images/yml_bug3.png' />
+  </Tab>
+  <Tab>
+  <Image src='/images/fixed_bug3.png' />
+  </Tab>
+  <Tab>
+    ```js copy filename="next.config.js" {3-5}
+    const nextConfig = {
+      output: 'export',
+      images: {
+        unoptimized: true,
+      },
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### Bug4
+
+<Tabs items={['bug图', '原因', '解决方案']}>
+  <Tab>
+    <Image src='/images/yml_bug4.png' />
+  </Tab>
+  <Tab>workflow permissions权限不足</Tab>
+  <Tab>
+    解决方案: 修改 workflow permissions权限 <br />
+    在 Settings > Actions > General 中 Workflow permissions
+    <Image src='/images/fixed_bug4.png' />
+
+    进入Actions将失败`workflow `重新就好了
+
+  </Tab>
+</Tabs>
+
+## GitHub Pages
+
+GitHub Pages 必须在每个 repo 的基础上打开, 打开它时，您可以选择要服务的分支,将服务设置在`.gh-pages`分支
+
+在浏览器中, 打开 GitHub 里的项目 repo
+在 Settings > Pages > Source 中, 将 Branch 分支设定在`.gh-pages`并点击 Save 保存配置
+
+<Image src='/images/github_pages.png' />
+
+等待 actions 部署完 Pages，可以点击`Visit site`访问站点
+
+<Image src='/images/deploy_pages.png' />
+
+## Next.js
+
+Next.js 的`next/image`、`next/link`和`next/router`指定路径是相对于 /的
+
+而 GitHub Pages 托管站点的 URL 为:`https://<你的 github name>.github.io/<repo>`
+
+如: https://simplelifecst.github.io/nextra-template/
+所以 需要通过配置使 Next.js 得到 `/<repo>`
+
+有两个相关的配置选项: `basePath` 和 `assetPrefix`
+
+将 basePath 设置为 `/<repo name>` 将生成 GitHub Pages 可访问链接
+
+将 assetPrefix 设置为 `/<repo name>` 将生成 GitHub Pages 可访问图像
+
+根据开发环境和生成环境来区分路径，来保证路径的正确性
+
+```js copy filename="next.config.js"
+const repo = 'nextra-template';
+const isProd = process.env.NODE_ENV === 'production';
+
+const nextConfig = {
+  assetPrefix: isProd ? `/${repo}` : '',
+  basePath: isProd ? `/${repo}` : '',
+};
+```
+
+### 完整配置
+
+```js copy filename="next.config.js"
+const repo = 'nextra-template';
+const isProd = process.env.NODE_ENV === 'production';
+
+const withNextra = require('nextra')({
+  theme: 'nextra-theme-docs',
+  themeConfig: './theme.config.jsx',
+});
+
+const nextConfig = {
+  output: 'export',
+  images: {
+    unoptimized: true,
+  },
+  assetPrefix: isProd ? `/${repo}` : '',
+  basePath: isProd ? `/${repo}` : '',
+};
+
+module.exports = withNextra(nextConfig);
+```
+
+## 结束
+
+将 NextJS 部署到 Github Actions 也就是这么回事了，如果你需要部署到 Gitee 上，只需要去同步仓库就 Ok 了
