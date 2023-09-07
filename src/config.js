@@ -1,3 +1,3 @@
 module.exports = {
-  repository: "nextra-template"
+  repository: "docs"
 }

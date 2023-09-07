@@ -1,13 +1,13 @@
 import Head from '@/components/Head';
-import LastUpdateDate from '@/components/LastUpdateDate';
 import Logo from '@/components/Logo';
 
 export default {
   logo: Logo,
   head: <Head />,
   project: {
-    link: 'https://github.com/SimpleLifecst/nextra-template',
+    link: 'https://github.com/SimpleLifecst/docs',
   },
+  docsRepositoryBase: 'https://github.com/SimpleLifecst/docs/tree/main/',
   sidebar: {
     toggleButton: true,
   },
@@ -17,19 +17,7 @@ export default {
     error: '搜索错误',
     placeholder: '搜索',
   },
-  toc: {
-    title: '目录',
-    backToTop: true,
-    float: true,
-  },
-  editLink: {
-    text: '在 GitHub 上编辑此页面 →',
-  },
-  feedback: {
-    content: '问题？给我反馈 →',
-  },
-  // 翻译功能
-  navigation: true,
+  navigation: false,
   // 底部版权标识
   footer: {
     text: (
@@ -40,12 +28,6 @@ export default {
       </div>
     ),
   },
-  // 网站图标
-  // faviconGlyph: './favicon.ico',
-  // 编辑此页面的跳转链接 后会自动拼接 pages/
-  docsRepositoryBase:
-    'https://github.com/SimpleLifecst/nextra-template/tree/main/',
-  // 页面标题 %s 占位符 由文章标题内容使用
   useNextSeoProps() {
     return {
       titleTemplate: '%s – SimpleLife',
@@ -60,5 +42,5 @@ export default {
       };
     },
   },
-  gitTimestamp: LastUpdateDate,
+  gitTimestamp: null,
 };

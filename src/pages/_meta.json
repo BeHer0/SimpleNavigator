@@ -1,20 +1,12 @@
 {
-  "docs": {
-    "title": "教程",
-    "type": "page"
-  },
-  "about": {
-    "title": "关于",
-    "type": "page"
+  "*": {
+    "theme": {
+      "toc": false,
+      "breadcrumb": false,
+      "layout": "full"
+    }
   },
   "index": {
-    "type": "page",
-    "display": "hidden",
-    "theme": {
-      "layout": "raw",
-      "sidebar": false,
-      "toc": false,
-      "footer": false
-    }
+    "title": "回忆录"
   }
 }

@@ -1,6 +1,6 @@
 import { setWebsiteIcon } from '@/utils';
 import { useEffect } from 'react';
-import '../globalStyle.scss';
+import '../global.scss';
 
 
 export default function MyApp({ Component, pageProps }) {
