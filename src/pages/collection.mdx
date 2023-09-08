@@ -1,8 +1,8 @@
 import Navigator from '@/components/Navigator';
-import {MEMOIR} from './data.js';
+import {COLLECTION} from './data.js';
 
 <div className='navigator-container'>
-  {MEMOIR.map((item) => {
+  {COLLECTION.map((item) => {
     return <Navigator key={item.id} item={item} />;
   })}
 </div>

@@ -1,36 +1,67 @@
+import {Modal, message} from 'antd';
 import {useState} from 'react';
-import Modal from './Modal';
 
-function Navigator() {
-  const [key, setKey] = useState(null);
+function Navigator({item}) {
+  const {title, smallTitle, iconSvg, children} = item;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
 
-  function handleClick(item) {
-    setKey(item);
-  }
+  const showModal = () => {
+    if (!children.length) {
+      return messageApi.warning('该链接已经失效');
+    }
+
+    if (children.length > 1) {
+      return setIsModalOpen(true);
+    }
+
+    window.open(children[0], '_blank');
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   return (
-    <div className='navigator-container'>
-      {[1, 2, 3, 4, 5, 6, 7].map((item) => {
-        return (
-          <>
-            <div key={item} className='box' onClick={() => handleClick(item)}>
-              <div className='content border'>
-                <img src='data:image/jpeg;base64,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' />
-                <div className='desc'>
-                  <div className='title'>
-                    标题标题标题标题标题标题标题标题标题标题标题
-                  </div>
-                  <div className='small'>
-                    详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情
-                  </div>
-                </div>
-              </div>
+    <div className='box'>
+      {contextHolder}
 
-              {key === item ? <Modal item={item} /> : ''}
-            </div>
-          </>
-        );
-      })}
+      <div className='content border' onClick={showModal}>
+        {/* <img src={getAvailablePath(imageSrc)} /> */}
+
+        <div className='icon'>{iconSvg}</div>
+
+        <div className='desc'>
+          <div className='title'>{title}</div>
+          <div className='small'>{smallTitle}</div>
+        </div>
+      </div>
+
+      {children.length > 1 && (
+        <Modal
+          wrapClassName='modal-wrap'
+          footer={null}
+          title={'关于' + title + '的链接'}
+          open={isModalOpen}
+          onCancel={handleCancel}
+        >
+          <div className='modal-container'>
+            {children.map((item) => {
+              return (
+                <a
+                  href={item.link}
+                  target='_blank'
+                  className='modal-item'
+                  key={item.id}
+                >
+                  <div className='icon'>{item.icon}</div>
+                  <div className='title'>{item.title}</div>
+                </a>
+              );
+            })}
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

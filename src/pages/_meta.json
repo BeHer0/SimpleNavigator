@@ -8,5 +8,9 @@
   },
   "index": {
     "title": "回忆录"
+  },
+  "collection": "收藏录",
+  "about": {
+    "title": "关于"
   }
 }

@@ -1,4 +1,7 @@
 .light {
+  .bg {
+    background-color: #ffffff;
+  }
   .border {
     border: 1px solid #ececec;
   }
@@ -9,12 +12,23 @@
 }
 
 .dark {
+  .bg {
+    background-color: #1f1f1f;
+  }
   .border {
     border: 1px solid #282828;
   }
-
   .navigator-container .content {
     background-color: #2c2e2f;
+  }
+
+  .modal-wrap {
+    .ant-modal-content,
+    .ant-modal-title,
+    .ant-modal-close-icon {
+      background-color: #1f1f1f;
+      color: #fff;
+    }
   }
 }
 
@@ -54,10 +68,14 @@
     align-items: center;
     padding: 5px;
 
-    img {
+    .icon {
+      padding: 5px;
       width: 40px;
       height: 40px;
-      margin: 0 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 5px;
       border-radius: 50%;
       overflow: hidden;
     }
@@ -113,18 +131,16 @@
 }
 
 .modal-container {
-  position: fixed;
-  z-index: 9999;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-  transition: all 10s ease;
-}
+  display: flex;
+  padding: 10px 0;
 
-.scroll {
-  overflow: hidden;
+  .modal-item {
+    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 @media screen and (max-width: 996px) {
