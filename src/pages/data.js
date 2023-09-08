@@ -1,6 +1,7 @@
 import GiteeSvg from "@/svgs/gitee"
 import GithubSvg from "@/svgs/github"
 import NextraSvg from "@/svgs/nextra"
+import ReactSvg from "@/svgs/react"
 import SimpleSvg from "@/svgs/simpleLife"
 import VueSvg from "@/svgs/vue"
 
@@ -35,10 +36,20 @@ export const COLLECTION = [
     children: ['https://vuepress.vuejs.org/zh/']
   },
   {
-    id: 1,
+    id: 2,
     title: "Nextra",
     smallTitle: "基于NextJS开发的Nextra主题框架",
     iconSvg: <NextraSvg />,
     children: ["https://nextra.site/docs"]
   },
+]
+
+export const REACT_PROJECT = [
+  {
+    id: 1,
+    title: "ZY_React18",
+    smallTitle: "使用React重写ZY项目",
+    iconSvg: <ReactSvg />,
+    children: ['https://culala.gitee.io/react-projects']
+  }
 ]

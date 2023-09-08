@@ -25,12 +25,8 @@ function Navigator({item}) {
   return (
     <div className='box'>
       {contextHolder}
-
       <div className='content border' onClick={showModal}>
-        {/* <img src={getAvailablePath(imageSrc)} /> */}
-
         <div className='icon'>{iconSvg}</div>
-
         <div className='desc'>
           <div className='title'>{title}</div>
           <div className='small'>{smallTitle}</div>

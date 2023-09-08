@@ -47,3 +47,7 @@
   -webkit-mask-position: 0%;
   mask-position: 0%;
 }
+
+.logo svg:first-child {
+  margin-right: 5px;
+}

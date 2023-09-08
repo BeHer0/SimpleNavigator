@@ -7,10 +7,11 @@
     }
   },
   "index": {
-    "title": "回忆录"
+    "title": "随想录"
   },
   "collection": "收藏录",
   "about": {
-    "title": "关于"
+    "title": "关于",
+    "type": "page"
   }
 }

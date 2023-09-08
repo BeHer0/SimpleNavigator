@@ -42,17 +42,37 @@
   color: #a4aab5;
 }
 
+.sl-footer {
+  span:first-child {
+    font-size: 18px;
+    font-style: italic;
+  }
+
+  span:last-child {
+    font-size: 12px;
+    font-style: italic;
+  }
+}
+
+.about-container {
+  .title {
+    text-align: center;
+    font-size: 32px;
+    margin: 10px;
+    font-weight: 600;
+  }
+}
+
 // 导航选项
 .navigator-container {
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 20px;
 
   .box {
     position: relative;
-    width: calc(25% - 20px); /* 每个div宽度为25%，减去边距的宽度 */
     margin-bottom: 10px;
     height: 90px;
-    margin: 15px 10px;
     cursor: pointer;
     transition: all 0.3s ease;
   }
@@ -129,7 +149,7 @@
     box-shadow: 0px 0px 20px rgba($color: #004ca3, $alpha: 0.1);
   }
 }
-
+// 模态框
 .modal-container {
   display: flex;
   padding: 10px 0;
@@ -142,19 +162,64 @@
     align-items: center;
   }
 }
+// 标签
+.tag-container {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  svg {
+    width: 30px;
+    margin-right: 10px;
+  }
+}
 
-@media screen and (max-width: 996px) {
+@media screen and (min-width: 997px) {
   .navigator-container {
     .box {
-      width: calc(33% - 20px);
+      width: calc(25% - 15px); /* 每个div宽度为25%，减去边距的宽度 */
+      margin: 10px;
+    }
+
+    .box:nth-child(4n + 1) {
+      margin-left: 0;
+    }
+
+    .box:nth-child(4n + 4) {
+      margin-right: 0;
     }
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (min-width: 769px) and (max-width: 996px) {
+  .navigator-container {
+    .box {
+      width: calc(100% / 3 - 20px);
+      margin: 10px 15px;
+    }
+
+    .box:nth-child(3n + 1) {
+      margin-left: 0;
+    }
+
+    .box:nth-child(3n + 3) {
+      margin-right: 0;
+    }
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 768px) {
   .navigator-container {
     .box {
       width: calc(50% - 20px);
+      margin: 20px;
+    }
+
+    .box:nth-child(2n + 1) {
+      margin-left: 0;
+    }
+
+    .box:nth-child(2n + 2) {
+      margin-right: 0;
     }
   }
 }
@@ -163,6 +228,7 @@
   .navigator-container {
     .box {
       width: 100%;
+      margin: 10px 0;
     }
   }
 }
