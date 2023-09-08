@@ -6,7 +6,6 @@ import SimpleSvg from "@/svgs/simpleLife"
 import VueSvg from "@/svgs/vue"
 
 export const MEMOIR = [
-
   {
     id: 2,
     title: "SimpleLife",
