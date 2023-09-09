@@ -1,13 +1,14 @@
 import Head from '@/components/Head';
 import Logo from '@/components/Logo';
+import {repository} from '@/config';
 
 export default {
   logo: Logo,
   head: <Head />,
   project: {
-    link: 'https://github.com/SimpleLifecst/docs',
+    link: `https://github.com/SimpleLifecst/${repository}`,
   },
-  docsRepositoryBase: 'https://github.com/SimpleLifecst/docs/tree/main/',
+  docsRepositoryBase: `https://github.com/SimpleLifecst/${repository}/tree/main/`,
   sidebar: {
     toggleButton: true,
   },
@@ -30,7 +31,7 @@ export default {
   },
   useNextSeoProps() {
     return {
-      titleTemplate: '%s – SimpleLife',
+      titleTemplate: '%s – Navigator',
     };
   },
   themeSwitch: {
