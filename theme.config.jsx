@@ -1,3 +1,4 @@
+import GiteeLink from '@/components/GiteeLink';
 import Head from '@/components/Head';
 import Logo from '@/components/Logo';
 import {repository} from '@/config';
@@ -19,6 +20,9 @@ export default {
     placeholder: '搜索',
   },
   navigation: false,
+  navbar: {
+    extraContent: <GiteeLink />,
+  },
   // 底部版权标识
   footer: {
     text: (
