@@ -27,8 +27,6 @@ function Navigator({ item }) {
       <div className="content border" onClick={showModal}>
         <div className="icon">{iconSvg}</div>
         <div className="desc">
-          //todo
-          <meta property="og:title" content={title} />
           <div className="title">{title}</div>
           <div className="small">{smallTitle}</div>
         </div>
