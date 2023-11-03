@@ -5,7 +5,6 @@ function Navigator({ item }) {
   const { title, smallTitle, iconSvg, children } = item;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
-
   const showModal = () => {
     if (!children.length) {
       return messageApi.warning('该链接已经失效');
@@ -28,6 +27,8 @@ function Navigator({ item }) {
       <div className="content border" onClick={showModal}>
         <div className="icon">{iconSvg}</div>
         <div className="desc">
+          //todo
+          <meta property="og:title" content={title} />
           <div className="title">{title}</div>
           <div className="small">{smallTitle}</div>
         </div>
