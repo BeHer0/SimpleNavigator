@@ -1,8 +1,8 @@
-import {Modal, message} from 'antd';
-import {useState} from 'react';
+import { Modal, message } from 'antd';
+import { useState } from 'react';
 
-function Navigator({item}) {
-  const {title, smallTitle, iconSvg, children} = item;
+function Navigator({ item }) {
+  const { title, smallTitle, iconSvg, children } = item;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -23,35 +23,35 @@ function Navigator({item}) {
   };
 
   return (
-    <div className='box'>
+    <div className="box">
       {contextHolder}
-      <div className='content border' onClick={showModal}>
-        <div className='icon'>{iconSvg}</div>
-        <div className='desc'>
-          <div className='title'>{title}</div>
-          <div className='small'>{smallTitle}</div>
+      <div className="content border" onClick={showModal}>
+        <div className="icon">{iconSvg}</div>
+        <div className="desc">
+          <div className="title">{title}</div>
+          <div className="small">{smallTitle}</div>
         </div>
       </div>
 
       {children.length > 1 && (
         <Modal
-          wrapClassName='modal-wrap'
+          wrapClassName="modal-wrap"
           footer={null}
           title={'关于' + title + '的链接'}
           open={isModalOpen}
           onCancel={handleCancel}
         >
-          <div className='modal-container'>
+          <div className="modal-container">
             {children.map((item) => {
               return (
                 <a
                   href={item.link}
-                  target='_blank'
-                  className='modal-item'
+                  target="_blank"
+                  className="modal-item"
                   key={item.id}
                 >
-                  <div className='icon'>{item.icon}</div>
-                  <div className='title'>{item.title}</div>
+                  <div className="icon">{item.icon}</div>
+                  <div className="title">{item.title}</div>
                 </a>
               );
             })}

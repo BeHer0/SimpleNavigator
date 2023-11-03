@@ -1,7 +1,7 @@
 import GiteeLink from '@/components/GiteeLink';
 import Head from '@/components/Head';
 import Logo from '@/components/Logo';
-import {repository} from '@/config';
+import { repository } from '@/config';
 
 export default {
   logo: Logo,
@@ -14,7 +14,7 @@ export default {
     toggleButton: true,
   },
   search: {
-    emptyResult: <span className='empty-result'>找不到结果</span>,
+    emptyResult: <span className="empty-result">找不到结果</span>,
     loading: '加载中',
     error: '搜索错误',
     placeholder: '搜索',
@@ -26,7 +26,7 @@ export default {
   // 底部版权标识
   footer: {
     text: (
-      <div className='sl-footer'>
+      <div className="sl-footer">
         <span>一个简单的人，做一件简单的事😀</span>
         <br />
         <span>Copyright {new Date().getFullYear()} © SimpleLife.</span>

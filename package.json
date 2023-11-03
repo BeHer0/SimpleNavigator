@@ -28,6 +28,7 @@
     "react-router-dom": "^6.15.0"
   },
   "devDependencies": {
+    "prettier": "^3.0.3",
     "sass": "^1.66.1"
   }
 }
