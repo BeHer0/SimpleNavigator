@@ -1,3 +1,3 @@
 module.exports = {
-  repository: "docs"
+  repository: "SimpleNavigator"
 }
