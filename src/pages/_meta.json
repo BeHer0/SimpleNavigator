@@ -7,8 +7,9 @@
     }
   },
   "index": {
-    "title": "随想录"
+    "title": "作品录"
   },
+  "docs": "文档录",
   "collection": "收藏录",
   "about": {
     "title": "关于",
