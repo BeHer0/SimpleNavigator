@@ -2,19 +2,18 @@
   "name": "docs",
   "version": "1.0.0",
   "description": "nextra框架搭建的文档主题网站",
-  "homepage": "https://github.com/SimpleLifecst/docs",
   "scripts": {
     "dev": "next",
     "build": "next build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SimpleLifecst/docs.git"
+    "url": "git+https://github.com/BeHer0/SimpleNavigator.git"
   },
   "author": "SimpleLife",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/SimpleLifecst/docs/issues"
+    "url": "https://github.com/BeHer0/SimpleNavigator/issues"
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",

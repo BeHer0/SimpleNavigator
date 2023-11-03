@@ -37,7 +37,7 @@ function Navigator({ item }) {
         <Modal
           wrapClassName="modal-wrap"
           footer={null}
-          title={'关于' + title + '的链接'}
+          title={'关于' + title + '的全部链接'}
           open={isModalOpen}
           onCancel={handleCancel}
         >

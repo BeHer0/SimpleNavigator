@@ -8,7 +8,7 @@ import VueSvg from '@/svgs/vue';
 export const MEMOIR = [
   {
     id: 2,
-    title: 'SimpleLife',
+    title: 'SimpleDocs',
     smallTitle: '使用Nextra搭建的文档主题',
     iconSvg: <SimpleSvg />,
     children: [

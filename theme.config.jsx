@@ -1,15 +1,15 @@
 import GiteeLink from '@/components/GiteeLink';
 import Head from '@/components/Head';
 import Logo from '@/components/Logo';
-import { repository } from '@/config';
+import { username, repository } from '@/config';
 
 export default {
   logo: Logo,
   head: <Head />,
   project: {
-    link: `https://github.com/SimpleLifecst/${repository}`,
+    link: `https://github.com/${username}/${repository}`,
   },
-  docsRepositoryBase: `https://github.com/SimpleLifecst/${repository}/tree/main/`,
+  docsRepositoryBase: `https://github.com/${username}/${repository}/tree/main/`,
   sidebar: {
     toggleButton: true,
   },
